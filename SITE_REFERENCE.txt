@@ -1,0 +1,480 @@
+================================================================
+TRIGGRR WEBSITE — PERSONAL REFERENCE GUIDE
+================================================================
+This file is your cheat-sheet for everything about the website.
+Keep it in the project root. It's not deployed anywhere.
+================================================================
+
+LAST UPDATED : Built with Claude (Batch 1 complete)
+STACK        : React 18 + Vite + Tailwind CSS + React Router
+HOSTING      : Vercel (free tier, push to GitHub = auto-deploy)
+FORM BACKEND : Google Apps Script → Google Sheets (separate deploy)
+================================================================
+
+
+----------------------------------------------------------------
+1. FULL FILE STRUCTURE (Batch 1 = 26 files)
+----------------------------------------------------------------
+
+triggrr/
+├── public/
+│   ├── favicon.ico          ← browser tab icon (make from logo.png)
+│   ├── og-image.png         ← 1200×630px image for WhatsApp/LinkedIn link previews
+│   └── logo.png             ← your Triggrr logo file
+│
+├── src/
+│   ├── components/
+│   │   ├── Navbar.jsx       ← sticky top nav, mobile hamburger, active link
+│   │   ├── Footer.jsx       ← 4-col footer, pulls service list from services.js
+│   │   ├── Skeleton.jsx     ← shimmer loaders (5 variants for different contexts)
+│   │   ├── ServiceCard.jsx  ← home page preview card for each service
+│   │   ├── VideoEmbed.jsx   ← lazy click-to-play YouTube iframe
+│   │   └── WhatsAppButton.jsx ← floating sticky WhatsApp button (always visible)
+│   │
+│   ├── pages/
+│   │   ├── Home.jsx         ← landing page (hero, stats, who, why, how, services, FAQ, CTA)
+│   │   ├── Services.jsx     ← [BUILD NEXT] niche-grouped services with search
+│   │   ├── Contact.jsx      ← [BUILD NEXT] 10-field form → Google Apps Script
+│   │   └── NotFound.jsx     ← [BUILD NEXT] 404 page
+│   │
+│   ├── data/
+│   │   └── services.js      ← ALL content lives here (services, niches, FAQ, stats)
+│   │
+│   ├── App.jsx              ← routing (React Router), Layout wrapper, GA4 tracker
+│   ├── main.jsx             ← React entry point (7 lines)
+│   └── index.css            ← Tailwind + brand CSS vars + all reusable classes
+│
+├── GoogleAppsScript.gs      ← [BUILD NEXT] deployed separately to Google Drive
+├── index.html               ← HTML shell (meta, OG, fonts, GA4 script, JSON-LD)
+├── package.json             ← dependencies (React, Vite, Tailwind, React Router)
+├── tailwind.config.js       ← brand colors, fonts, animations, spacing
+├── vite.config.js           ← build config, @/ path alias
+├── postcss.config.js        ← required for Tailwind to work (root level!)
+├── vercel.json              ← SPA routing fix + security headers
+├── .env.example             ← [BUILD NEXT] template for environment variables
+├── README.md                ← professional agency README (public-facing)
+└── SITE_REFERENCE.txt       ← this file (personal ops guide)
+
+
+----------------------------------------------------------------
+2. LOCAL DEVELOPMENT SETUP
+----------------------------------------------------------------
+
+Step 1: Install Node.js (v18 or later)
+  Download from: https://nodejs.org/en/download
+
+Step 2: Clone or download the project
+  git clone https://github.com/YOUR_USERNAME/triggrr.git
+  cd triggrr
+
+Step 3: Install dependencies
+  npm install
+  (This reads package.json and installs React, Vite, Tailwind etc.)
+
+Step 4: Set up environment variables
+  Copy .env.example to .env
+  Fill in the values (see Section 7 below)
+
+Step 5: Run the dev server
+  npm run dev
+  Opens at: http://localhost:3000
+
+Step 6: Build for production (test before deploying)
+  npm run build
+  npm run preview
+  (Opens a production-like preview at localhost:4173)
+
+
+----------------------------------------------------------------
+3. DEPLOYMENT (VERCEL — FREE)
+----------------------------------------------------------------
+
+One-time setup:
+  1. Push the project to GitHub (github.com → New repository)
+  2. Go to vercel.com → "Add New Project"
+  3. Import your GitHub repo
+  4. Framework preset: Vite (auto-detected)
+  5. Add environment variables (same as your .env file)
+  6. Click Deploy
+
+After that:
+  Every time you push to GitHub main branch → Vercel auto-deploys
+  Takes about 30–60 seconds
+
+Custom domain (when you buy one):
+  Vercel dashboard → your project → Settings → Domains
+  Add your domain (e.g. triggrr.io)
+  Vercel gives you DNS records to add in your domain registrar
+
+After adding domain, find and replace "YOUR_DOMAIN.com" in:
+  - index.html (og:url, og:image, canonical, twitter:image, JSON-LD url)
+  - src/data/services.js (SITE.domain)
+  These are the only two files that need updating.
+
+
+----------------------------------------------------------------
+4. HOW TO EDIT CONTENT (NO CODE CHANGES NEEDED)
+----------------------------------------------------------------
+
+All website content lives in ONE file: src/data/services.js
+
+Open services.js and you can change:
+
+  SITE object:
+    → Change email, WhatsApp number, social links, founder name
+
+  SERVICES array:
+    → Edit service title, description, pricing, YouTube video ID
+    → Add/remove pricing tiers
+    → Change the youtubeId when you upload a new video
+
+  FAQ array:
+    → Add/remove/reorder FAQ questions and answers
+
+  STATS array:
+    → Update the numbers as you complete more projects
+
+  TARGET_CLIENTS array:
+    → Add/remove business types from the "Who we help" pills
+
+  HOW_IT_WORKS array:
+    → Edit the 3-step process descriptions
+
+Save the file → Vite hot-reloads → changes visible immediately in browser
+
+
+----------------------------------------------------------------
+5. HOW TO ADD A NEW SERVICE
+----------------------------------------------------------------
+
+In src/data/services.js, find the SERVICES array.
+Scroll to the bottom — there is a commented-out TEMPLATE block.
+Copy it, uncomment it, fill in the fields.
+
+Required fields:
+  id          → next number after your last service (e.g. 6)
+  slug        → lowercase-hyphenated (e.g. 'invoice-automation')
+  nicheId     → must match one of the NICHES[].id values
+  title       → full service name
+  youtubeId   → 11-char ID from YouTube URL, or null if no video yet
+
+That's it. The service will appear automatically on:
+  • Home page cards grid
+  • Services page (in its niche group)
+  • Footer service links
+  • Search results
+
+If you're adding a service in a NEW category/niche:
+  First add the niche to the NICHES array (instructions in services.js)
+  Then add your service with the new nicheId
+
+
+----------------------------------------------------------------
+6. HOW TO ADD A NEW PAGE / ROUTE
+----------------------------------------------------------------
+
+Step 1: Create src/pages/NewPage.jsx
+  (Copy NotFound.jsx as a starting template)
+
+Step 2: In src/App.jsx, add one lazy import at the top:
+  const NewPage = lazy(() => import('@/pages/NewPage'))
+
+Step 3: In App.jsx, add one Route inside the Layout route block:
+  <Route path="new-path" element={<NewPage />} />
+
+Step 4: Add a nav link in src/components/Navbar.jsx:
+  Find the NAV_LINKS array and add:
+  { label: 'New Page', to: '/new-path' }
+
+Step 5: Add a footer link in src/components/Footer.jsx:
+  Find COMPANY_LINKS and add:
+  { label: 'New Page', to: '/new-path' }
+
+Done. No other files need changing.
+
+
+----------------------------------------------------------------
+7. ENVIRONMENT VARIABLES
+----------------------------------------------------------------
+
+These are stored in a .env file (never commit this to GitHub!).
+The .env.example file shows the format without real values.
+
+VITE_SCRIPT_URL
+  The Google Apps Script web app URL.
+  Get it after deploying your Apps Script (see Section 9).
+  Used by Contact.jsx to submit the form.
+
+VITE_RECAPTCHA_KEY
+  Your reCAPTCHA v3 site key (public key, safe to expose in frontend).
+  Get it from: google.com/recaptcha → Admin Console → Create site
+  Choose reCAPTCHA v3, add your domain.
+
+In .env file:
+  VITE_SCRIPT_URL=https://script.google.com/macros/s/YOUR_ID/exec
+  VITE_RECAPTCHA_KEY=6Lc...YOUR_KEY...
+
+In React code, access them as:
+  import.meta.env.VITE_SCRIPT_URL
+  import.meta.env.VITE_RECAPTCHA_KEY
+
+On Vercel: add these in the Vercel dashboard under
+  Project → Settings → Environment Variables
+
+
+----------------------------------------------------------------
+8. HOW TO ADD A YOUTUBE VIDEO
+----------------------------------------------------------------
+
+When you upload a new demo video to YouTube:
+
+Step 1: Get the video ID
+  YouTube URL: https://youtu.be/kbkyW1aUen8
+  Video ID:    kbkyW1aUen8  (everything after youtu.be/)
+
+Step 2: In src/data/services.js, find the service
+  Change: youtubeId: null
+  To:     youtubeId: 'kbkyW1aUen8'
+
+Step 3: Save and deploy
+
+The VideoEmbed component handles everything else:
+  - Shows a clickable thumbnail first (faster page load)
+  - Loads the iframe only when user clicks (saves bandwidth)
+  - Shows "Coming Soon" placeholder when youtubeId is null
+  - Falls back from HD thumbnail to standard quality if HD isn't ready
+
+
+----------------------------------------------------------------
+9. GOOGLE APPS SCRIPT SETUP (FORM → GOOGLE SHEETS)
+----------------------------------------------------------------
+
+This handles the Contact form submissions. It's NOT inside the
+React project — it's deployed separately on Google's servers.
+
+Step 1: Create a Google Sheet
+  Name the columns: Timestamp, Name, Email, Mobile, Business,
+  Industry, Service, Budget, Timeline, Challenge, Source
+
+Step 2: Open Script Editor
+  In the Google Sheet: Extensions → Apps Script
+
+Step 3: Paste the GoogleAppsScript.gs code
+  (Built in next batch — copy the entire file contents)
+
+Step 4: Deploy as Web App
+  Click Deploy → New deployment
+  Type: Web app
+  Execute as: Me
+  Who has access: Anyone
+  Click Deploy → Copy the Web App URL
+
+Step 5: Add to Vercel environment variables
+  VITE_SCRIPT_URL = the URL you just copied
+
+Step 6: Test by submitting the contact form on your site
+  Check the Google Sheet — a new row should appear
+
+
+----------------------------------------------------------------
+10. CSP (CONTENT SECURITY POLICY) NOTES
+----------------------------------------------------------------
+
+The vercel.json file has strict security headers. If you add
+a new third-party service, you may need to update the CSP.
+
+IMMEDIATE ACTION NEEDED:
+  Open vercel.json → find Content-Security-Policy header
+  Add "https://cdn.jsdelivr.net" to:
+    - style-src
+    - font-src
+  This allows the Tabler Icons web font to load.
+
+Future additions (when you add Batch 2 features):
+  Calendly:       add https://calendly.com to frame-src + script-src
+  Crisp chat:     add https://client.crisp.chat to script-src + connect-src
+  Razorpay:       add https://checkout.razorpay.com to script-src + frame-src
+  Supabase:       add your supabase URL to connect-src
+
+
+----------------------------------------------------------------
+11. DESIGN SYSTEM QUICK REFERENCE
+----------------------------------------------------------------
+
+Brand colors (in tailwind.config.js and index.css):
+  Background:     #0D0D1A   (bg-bg-primary)
+  Card:           #12122A   (bg-bg-card)
+  Purple:         #7C3AED   (bg-purple / text-purple)
+  Purple light:   #9F67FF   (text-purple-light)
+  Cyan:           #06D6F5   (text-cyan)
+  Text primary:   #FFFFFF
+  Text muted:     #94A3B8   (text-text-muted)
+  Text faint:     #475569   (text-text-faint)
+  Border:         rgba(255,255,255,0.08)  (border-border)
+  WhatsApp green: #25D366   (text-whatsapp / bg-whatsapp)
+
+Font: Sora (loaded from Google Fonts in index.html)
+  font-extrabold = 800 → headlines
+  font-bold      = 700 → subheadings, card titles
+  font-semibold  = 600 → buttons, labels
+  font-medium    = 500 → nav links, badges
+  font-normal    = 400 → body text
+
+Reusable CSS classes (from index.css — use these, not inline styles):
+  .card               → dark card with hover purple glow
+  .btn-primary        → purple filled button
+  .btn-outline        → transparent outlined button
+  .btn-whatsapp       → green WhatsApp button
+  .eyebrow            → small purple section label (uppercase, tracked)
+  .text-gradient      → white-to-cyan gradient text
+  .stat-gradient      → cyan-to-purple gradient (for big numbers)
+  .skeleton           → shimmer loading animation
+  .form-input         → styled dark input field
+  .form-select        → styled dark select dropdown
+  .search-input       → input with left icon space
+  .glass              → frosted glass background (navbar)
+  .dot-bg             → purple dot grid background
+  .animate-on-scroll  → starts invisible, use with .in-view
+  .section-divider    → purple-tinted horizontal rule
+
+Spacing pattern used throughout:
+  Section padding: py-20 sm:py-28
+  Container:       max-w-7xl mx-auto px-4 sm:px-6 lg:px-8
+  Card gap:        gap-6
+  Section gap:     mb-14 (between header and content)
+
+
+----------------------------------------------------------------
+12. SCROLL ANIMATIONS — HOW THEY WORK
+----------------------------------------------------------------
+
+Any element with class "animate-on-scroll" starts:
+  opacity: 0 and translateY: 28px (invisible, slightly below)
+
+When the element enters the viewport, JavaScript adds "in-view":
+  opacity: 1 and translateY: 0 (fades in and slides up)
+
+The IntersectionObserver code lives at the top of each page
+component (Home.jsx, Services.jsx, etc.) in a useEffect hook.
+It fires once per element, then stops watching (performance).
+
+To stagger multiple elements (e.g. cards in a grid), add delay:
+  delay-1 = 0.08s  delay-2 = 0.16s  delay-3 = 0.24s
+  delay-4 = 0.32s  delay-5 = 0.40s
+
+To make any new element animate on scroll:
+  className="animate-on-scroll delay-2"
+  No other changes needed.
+
+IMPORTANT: If you create dynamic class names like delay-${i},
+Tailwind won't detect them at build time and will remove those
+styles. Use a lookup array of literal strings instead:
+  const delays = ['delay-1', 'delay-2', 'delay-3', 'delay-4', 'delay-5']
+  className={`animate-on-scroll ${delays[i] ?? 'delay-5'}`}
+
+
+----------------------------------------------------------------
+13. BATCH 2 FEATURES (WHEN READY)
+----------------------------------------------------------------
+
+These are NOT built yet. Add them after you have paying clients.
+
+New pages to build:
+  About.jsx         → Your story, face, credibility (huge trust builder for India)
+  CaseStudies.jsx   → Real client results with before/after numbers
+  Blog.jsx          → SEO content (long-term traffic)
+  BlogPost.jsx      → Individual blog article
+  ThankYou.jsx      → Dedicated page after form submission
+  PrivacyPolicy.jsx → Required before international traffic grows
+
+New components:
+  ROICalculator.jsx     → User enters "hours/week" → sees annual savings in ₹
+  TestimonialsCarousel  → Client reviews with photos
+  BookingWidget.jsx     → Calendly embed for scheduling calls
+  PricingToggle.jsx     → ₹ / $ switch for international clients
+  LiveChatButton.jsx    → Crisp.chat free tier (free tier = 2 seats)
+  CookieConsent.jsx     → Required for EU/international visitors
+
+Infrastructure:
+  manifest.json + sw.js → PWA: site installs on Android home screen
+  supabase.js           → Replace Google Sheets as form database
+  Razorpay integration  → Accept payments online (Indian clients)
+  Stripe integration    → Accept payments (international clients)
+  Sanity CMS            → Edit blog content without touching code
+
+
+----------------------------------------------------------------
+14. KNOWN GOTCHAS & IMPORTANT NOTES
+----------------------------------------------------------------
+
+1. postcss.config.js MUST be in the root folder (same level as
+   package.json). Tailwind will not compile without it.
+
+2. vercel.json needs cdn.jsdelivr.net added to style-src and
+   font-src in the CSP header, or Tabler Icons won't load.
+
+3. Dynamic Tailwind class names (e.g. `text-${color}`) won't
+   survive the production build. Always use full literal class
+   names in JSX or component files.
+
+4. The .env file must never be committed to GitHub.
+   It's in .gitignore automatically. The .env.example file
+   (which has no real values) CAN be committed.
+
+5. Google Apps Script URL changes every time you deploy a new
+   version. Update VITE_SCRIPT_URL in Vercel env vars each time.
+
+6. YouTube thumbnails: maxresdefault.jpg (HD) may return 404 for
+   new or private videos. VideoEmbed auto-falls back to hqdefault.
+   If both fail, the skeleton persists. Fix: make video public on YT.
+
+7. The @/ path alias (e.g. import '@/components/Navbar') maps to
+   the src/ folder. Set up in vite.config.js. Only works in Vite
+   projects — not in raw Node.js scripts.
+
+8. Sticky navbar height is h-16 (64px = 4rem). If you change it,
+   update the hero section's min-h-[calc(100vh-4rem)] to match.
+
+9. WhatsApp pre-filled message is in SITE.whatsappUrl in
+   services.js. Edit the ?text= parameter to change the message.
+
+10. The section-divider class (in index.css) creates a purple-tinted
+    horizontal line. Use between major sections for visual breathing room.
+
+
+----------------------------------------------------------------
+15. PAGES REMAINING TO BUILD
+----------------------------------------------------------------
+
+Still to build in Batch 1:
+  ✗ src/pages/Services.jsx    (niche-grouped, search, videos, pricing)
+  ✗ src/pages/Contact.jsx     (form, reCAPTCHA, honeypot, submit)
+  ✗ src/pages/NotFound.jsx    (404)
+  ✗ GoogleAppsScript.gs       (form backend, deployed to Google Drive)
+  ✗ .env.example              (environment variable template)
+
+Already built (✓):
+  ✓ package.json
+  ✓ tailwind.config.js
+  ✓ vite.config.js
+  ✓ postcss.config.js
+  ✓ vercel.json
+  ✓ index.html
+  ✓ src/main.jsx
+  ✓ src/App.jsx
+  ✓ src/index.css
+  ✓ src/data/services.js
+  ✓ src/components/Navbar.jsx
+  ✓ src/components/Footer.jsx
+  ✓ src/components/Skeleton.jsx
+  ✓ src/components/ServiceCard.jsx
+  ✓ src/components/VideoEmbed.jsx
+  ✓ src/components/WhatsAppButton.jsx
+  ✓ src/pages/Home.jsx
+  ✓ README.md
+  ✓ SITE_REFERENCE.txt (this file)
+
+================================================================
+END OF REFERENCE GUIDE
+Built for Triggrr by Prabhath · Andhra Pradesh, India
+================================================================
