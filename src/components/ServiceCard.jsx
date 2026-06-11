@@ -93,14 +93,14 @@ export default function ServiceCard({ service, index = 0, niche }) {
         </span>
       </div>
 
-      {/* ── CTA link ─────────────────────────────────────── */}
+      {/* ── CTA link — decorative, whole card is a <Link> ── */}
       <div
         className="
           flex items-center gap-1.5 text-sm font-medium
           text-purple-light
           group-hover:gap-3 transition-all duration-200
         "
-        aria-hidden="true"  {/* Whole card is a link; this is decorative */}
+        aria-hidden="true"
       >
         View details
         <i className="ti ti-arrow-right text-base" />
