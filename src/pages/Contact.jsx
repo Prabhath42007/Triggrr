@@ -316,13 +316,19 @@ export default function Contact() {
         console.warn('[Contact] VITE_SCRIPT_URL not set — simulating success.')
         await new Promise(r => setTimeout(r, 1200))
       } else {
-        // no-cors: response is opaque; we can't read it, so we
-        // assume success if the fetch itself doesn't throw.
+        // no-cors: response is opaque — we can't read it, so we
+        // assume success if the fetch doesn't throw.
+        //
+        // ⚠️  Do NOT set Content-Type: application/json here.
+        // The Fetch spec forbids non-CORS-safelisted headers in no-cors mode.
+        // Allowed Content-Type values are: text/plain, multipart/form-data,
+        // application/x-www-form-urlencoded.
+        // Omitting it defaults to text/plain — Apps Script reads
+        // e.postData.contents regardless of content-type, so JSON parses fine.
         await fetch(url, {
-          method:  'POST',
-          mode:    'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify(payload),
+          method: 'POST',
+          mode:   'no-cors',
+          body:   JSON.stringify(payload),
         })
       }
 
