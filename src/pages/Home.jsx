@@ -58,7 +58,7 @@ export default function Home() {
  
   // ── Page title ───────────────────────────────────────────
   useEffect(() => {
-    document.title = 'Triggrr — Python & AI Automation for Small Businesses'
+    document.title = 'Triggrr | Business Automations'
     document
       .querySelector('meta[name="description"]')
       ?.setAttribute('content', SITE.description)

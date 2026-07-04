@@ -2,7 +2,7 @@
 
 <div align="center">
 
-**Automate. Grow. Dominate.**
+**Automate. Grow. Scale.**
 
 *Python & AI automation systems for Indian small businesses*
 

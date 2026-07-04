@@ -22,15 +22,14 @@
 // ============================================================
 export const SITE = {
   name:        'Triggrr',
-  tagline:     'Automate. Grow. Dominate.',
+  tagline:     'Automate. Grow. Scale.',
   description: 'We automate the repetitive tasks eating your time — invoices, reports, follow-ups — so you can focus on what actually grows your business.',
   email:       'triggrr.tech@gmail.com',
   whatsapp:    '+919381149845',
   whatsappUrl: 'https://wa.me/919381149845?text=Hi%20Triggrr!%20I%20want%20to%20know%20more%20about%20your%20automation%20services.',
   location:    'Andhra Pradesh, India',
   founder:     'Prabhath',
-  // ↓ Replace once you have a domain (also update index.html placeholders)
-  domain:      'YOUR_DOMAIN.com',
+  domain:      'triggrrtech.com',
   // ↓ Get from analytics.google.com → Admin → Data Streams → Web stream details
   ga4Id:       'G-XXXXXXXXXX',
 
