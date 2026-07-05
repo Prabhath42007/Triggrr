@@ -57,10 +57,7 @@ export default function NotFound() {
             This page doesn&apos;t exist
           </h1>
           <p className="text-text-muted leading-relaxed">
-            The URL you visited isn&apos;t connected to anything.{' '}
-            <span className="text-text-faint">
-              (Even our automation couldn&apos;t find it.)
-            </span>
+            The URL you entered doesn't exist.
           </p>
         </div>
 
