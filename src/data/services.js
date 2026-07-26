@@ -7,9 +7,9 @@
  *
  * TABLE OF CONTENTS:
  *   1. SITE CONFIG
- *   2. NICHES       ← How to add/remove business categories
- *   3. SERVICES     ← How to add/remove individual services
- *   4. SEARCH       ← searchServices() + getServicesByNiche()
+ *   2. NICHES
+ *   3. SERVICES   ← taglines & problem copy rewritten for emotion + curiosity
+ *   4. SEARCH
  *   5. STATS
  *   6. FAQ
  *   7. HOW IT WORKS
@@ -18,20 +18,19 @@
  */
 
 // ============================================================
-// 1. SITE CONFIG — global constants used across all pages
+// 1. SITE CONFIG
 // ============================================================
 export const SITE = {
   name:        'Triggrr',
   tagline:     'Automate-Grow-Scale',
-  description: 'We automate the repetitive tasks eating your time — invoices, reports, follow-ups — so you can focus on what actually grows your business.',
-  email:       'automate@triggrrtech.com',
+  description: 'We automate the repetitive tasks eating your time — lead follow-ups, price monitoring, product listings, support tickets — so you can focus on growing your business.',
+  email:       'prabhath@triggrrtech.com',
   whatsapp:    '+919381149845',
   whatsappUrl: 'https://wa.me/919381149845?text=Hi%20Triggrr!%20I%20want%20to%20know%20more%20about%20your%20automation%20services.',
   location:    'Andhra Pradesh, India',
   founder:     'Prabhath',
   domain:      'triggrrtech.com',
-  // ↓ Get from analytics.google.com → Admin → Data Streams → Web stream details
-  ga4Id:       'G-XXXXXXXXXX',
+  ga4Id:       'G-11WY8EZ6ZB',
 
   social: {
     instagram: 'https://www.instagram.com/triggrr.tech/',
@@ -42,30 +41,15 @@ export const SITE = {
 }
 
 // ============================================================
-// 2. NICHES — Business categories that group related services
+// 2. NICHES
 // ============================================================
-//
-// HOW TO ADD A NEW NICHE:
-//   1. Copy any niche object below and paste it into the array
-//   2. Change the `id` to a unique lowercase string (e.g. 'healthcare')
-//   3. Fill in label, icon, description, color, targetClient
-//   4. Add services to SERVICES array below with nicheId: 'healthcare'
-//   That's it — the Services page groups cards automatically.
-//
-// HOW TO REMOVE A NICHE:
-//   1. Remove the niche object from the array below
-//   2. In SERVICES, either delete services with that nicheId
-//      or move them to another nicheId
-//
-// HOW TO REORDER NICHES:
-//   Drag the objects into the order you want — UI follows this order.
-//
-// ICONS: Use any Tabler Icon class name → https://tabler.io/icons
-// COLOR: 'purple' or 'cyan' (maps to brand accent colors)
+// HOW TO ADD A NEW NICHE: Copy any object below, change the id,
+// fill label/icon/description/color/targetClient/searchTerms,
+// then add services below with nicheId matching the new id.
+// HOW TO REMOVE: Delete the object + remove services with that nicheId.
 // ============================================================
 
 export const NICHES = [
-  // ── Niche 1 ──
   {
     id:           'ecommerce',
     label:        'E-commerce & Marketplace',
@@ -76,8 +60,6 @@ export const NICHES = [
     targetClient: 'Online sellers with 50+ products or 100+ orders per month',
     searchTerms:  ['amazon', 'flipkart', 'shopify', 'etsy', 'online store', 'marketplace', 'seller', 'product', 'listing', 'price', 'review'],
   },
-
-  // ── Niche 2 ──
   {
     id:           'sales',
     label:        'Sales & Lead Generation',
@@ -88,8 +70,6 @@ export const NICHES = [
     targetClient: 'Businesses spending on ads but losing leads to slow follow-up',
     searchTerms:  ['lead', 'crm', 'sales', 'follow up', 'form', 'inquiry', 'prospect', 'convert'],
   },
-
-  // ── Niche 3 ──
   {
     id:           'support',
     label:        'Customer Support',
@@ -100,11 +80,7 @@ export const NICHES = [
     targetClient: 'E-commerce brands and service businesses drowning in repetitive customer questions',
     searchTerms:  ['support', 'ticket', 'customer', 'helpdesk', 'chat', 'query', 'complaint', 'reply'],
   },
-
-  // ──────────────────────────────────────────────────────────
-  // FUTURE NICHES — Uncomment + fill in `id` when adding a
-  // new niche. Then add matching services below in SERVICES.
-  // ──────────────────────────────────────────────────────────
+  // ── FUTURE NICHES — uncomment + fill when adding a new category ──
   // {
   //   id:           'finance',
   //   label:        'Finance & Accounting',
@@ -113,58 +89,25 @@ export const NICHES = [
   //   description:  'For CA firms, accountants, and finance teams',
   //   color:        'purple',
   //   targetClient: 'Accounting firms processing 100+ invoices per month',
-  //   searchTerms:  ['invoice', 'billing', 'accounting', 'gst', 'tally', 'ca', 'finance', 'payment'],
-  // },
-  // {
-  //   id:           'healthcare',
-  //   label:        'Healthcare & Clinics',
-  //   shortLabel:   'Healthcare',
-  //   icon:         'ti-stethoscope',
-  //   description:  'For clinics, hospitals, and health service providers',
-  //   color:        'cyan',
-  //   targetClient: 'Clinics booking 30+ appointments per day',
-  //   searchTerms:  ['clinic', 'hospital', 'appointment', 'patient', 'doctor', 'healthcare', 'booking'],
-  // },
-  // {
-  //   id:           'realestate',
-  //   label:        'Real Estate',
-  //   shortLabel:   'Real Estate',
-  //   icon:         'ti-building',
-  //   description:  'For real estate agents and property management companies',
-  //   color:        'purple',
-  //   targetClient: 'Agents handling 20+ property inquiries per week',
-  //   searchTerms:  ['real estate', 'property', 'agent', 'rent', 'sale', 'listing', 'housing'],
+  //   searchTerms:  ['invoice', 'billing', 'accounting', 'gst', 'tally', 'ca', 'finance'],
   // },
 ]
 
 // ============================================================
-// 3. SERVICES — All service definitions
+// 3. SERVICES
 // ============================================================
+// HOW TO ADD A SERVICE: Copy the template at the bottom of this
+// array, fill every field, set nicheId to an existing NICHES id.
+// HOW TO REMOVE: Delete the object.
+// HOW TO REORDER: Move objects within the array.
+// HOW TO ADD A VIDEO: Set youtubeId to the 11-char ID from URL.
+//   e.g. youtu.be/kbkyW1aUen8 → youtubeId: 'kbkyW1aUen8'
+//   Set to null to show "Coming soon" placeholder.
 //
-// HOW TO ADD A NEW SERVICE:
-//   1. Copy the template comment block at the bottom of this
-//      array and paste it as a new object
-//   2. Fill in every field (required: id, slug, nicheId, title)
-//   3. Set nicheId to an existing NICHES[].id value
-//   4. Set youtubeId to the 11-char ID from your YouTube URL
-//      e.g. youtube.com/watch?v=ABC123XYZ01 → 'ABC123XYZ01'
-//      Set to null if no video yet — shows "Coming Soon" badge
-//   5. Save — both Home page cards and Services page update
-//
-// HOW TO REMOVE A SERVICE:
-//   Delete the entire object from the array below.
-//
-// HOW TO REORDER SERVICES:
-//   Move the objects into the order you want within each niche.
-//
-// PRICING SHAPE:
-//   pricing[]: { name, price, period, popular, features[], priceNote? }
-//   period: 'one-time' | '/month' | '/product'
-//   popular: true shows the "Most Popular" badge on the card
-//
-// RETAINER SHAPE (optional):
-//   retainer: { price, period, features[], priceNote? }
-//   Set to null if service has no retainer option
+// TRIAL OBJECT shape:
+//   { headline, duration, what[] }
+//   duration: '7 days' | '14 days' | 'One-time' etc.
+//   what: exactly 4 bullet strings (shown in 2×2 grid)
 // ============================================================
 
 export const SERVICES = [
@@ -176,25 +119,25 @@ export const SERVICES = [
   {
     id:          3,
     slug:        'product-listing-engine',
-    nicheId:     'ecommerce',               // references NICHES[].id
+    nicheId:     'ecommerce',
     icon:        'ti-tag',
     accentColor: 'cyan',
-    title:       'AI Product Listing Engine',
-    tagline:     '500 products. SEO-optimised listings for Amazon, Shopify, and Etsy. Generated while you sleep.',
-    shortDesc:   'Feed a spreadsheet, get platform-ready product listings published across all your channels automatically.',
-    youtubeId:   null,                      // ← Paste your YouTube video ID here when uploaded
-                                            //   e.g. 'dQw4w9WgXcQ' from youtu.be/dQw4w9WgXcQ
+
+    title:     'AI Product Listing Engine',
+    tagline:   "Your product is sitting on page 4 of Amazon. Not because it's bad. Because your competitor's title has 143 keywords and yours says 'Blue Cotton Shirt'.",
+    shortDesc: 'Feed a spreadsheet, get keyword-rich platform-ready listings published across Amazon, Shopify, and Etsy — automatically, while you sleep.',
+    youtubeId: null,
+
+    problem: {
+      hook:   "Page 1 of Amazon is not won by the best product. It's won by the best title.",
+      detail: "Search your own product category right now. The top results have 150-character keyword-packed titles, five bullet points hitting every buyer intent, and 300-word descriptions matching exactly what customers search. Yours probably has copy-pasted supplier text. Amazon's algorithm made its decision the day you listed it.",
+    },
 
     searchKeywords: [
       'product listing', 'amazon listing', 'shopify listing', 'etsy listing',
       'seo description', 'bulk listing', 'product title', 'keywords',
       'catalogue', 'product upload', 'content generation',
     ],
-
-    problem: {
-      hook:   'Writing one product listing takes 30 minutes. You have 500 products.',
-      detail: "That's 250 hours of copy work. And most sellers paste supplier descriptions which get flagged for duplicate content and never rank. This generates unique, keyword-rich, platform-specific listings at scale — in minutes.",
-    },
 
     what: {
       input:   'Google Sheet with raw product data — name, category, material, features, price',
@@ -207,6 +150,17 @@ export const SERVICES = [
     roiStat:  '₹1',
     roiLabel: 'per listing generated — 500 products = ₹500 total',
     roiNote:  'Sellers using AI-generated listings report 40–60% improvement in organic search visibility within 30 days.',
+
+    trial: {
+      headline: 'We generate your first 25 listings — free',
+      duration: 'One-time',
+      what: [
+        '25 AI-written, platform-specific listings',
+        'Title, bullets, description & keywords',
+        'Amazon or Shopify ready to publish',
+        'No card. No contract. No catch.',
+      ],
+    },
 
     pricing: [
       {
@@ -253,12 +207,11 @@ export const SERVICES = [
       },
     ],
 
-    retainer: null, // retainer is already included in pricing above
-
+    retainer: null,
     architecture: 'Google Sheets (Pending rows) → n8n iterator → Claude AI (title + bullets + description + keywords) → Shopify / Amazon SP-API → status update → error log',
   },
 
-  // ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ──
+  // ─────────────────────────────────────────
 
   {
     id:          4,
@@ -266,10 +219,16 @@ export const SERVICES = [
     nicheId:     'ecommerce',
     icon:        'ti-chart-dots-3',
     accentColor: 'purple',
-    title:       'AI Review Mining & Competitor Intelligence',
-    tagline:     "Your competitors' reviews are telling you exactly how to beat them. This reads all 4,000 of them in 60 seconds.",
-    shortDesc:   'Analyse thousands of competitor reviews to find product gaps, customer language, and untapped opportunities.',
-    youtubeId:   'KEnSKI-i1gU',             // ← real video: youtu.be/KEnSKI-i1gU
+
+    title:     'AI Review Mining & Competitor Intelligence',
+    tagline:   "4,200 customers wrote exactly what they hate about your competitor's product. Every word is a product improvement, a listing tweak, or an ad headline. You've never read a single one.",
+    shortDesc: "Analyse thousands of competitor reviews in 60 seconds. Find the exact product gaps, customer language, and untapped opportunities your rivals haven't noticed either.",
+    youtubeId: 'KEnSKI-i1gU',
+
+    problem: {
+      hook:   "The blueprint to beat your biggest competitor is sitting in their 1-star reviews. All 4,000 of them.",
+      detail: "A customer angry enough to write a 1-star review spends 10 minutes telling the internet exactly why — the exact failure, the exact broken promise, the exact word that shattered their trust. That's your product roadmap. That's your ad copy. That's your competitive edge — sitting public on Amazon, completely ignored.",
+    },
 
     searchKeywords: [
       'review analysis', 'competitor intelligence', 'amazon reviews', 'flipkart reviews',
@@ -277,22 +236,28 @@ export const SERVICES = [
       'review scraping', 'market research', 'product gap analysis',
     ],
 
-    problem: {
-      hook:   'A product page has 4,000 reviews — and you have read maybe 30.',
-      detail: "Inside those reviews: the exact words customers use, the features they beg for, and the flaws your competitors have not fixed. Every unanswered complaint is a gap your product can own.",
-    },
-
     what: {
-      input:   'Amazon or Flipkart product URLs — your products and competitors',
+      input:   'Amazon or Flipkart product URLs — your products and up to 3 competitors',
       process: 'Python scraper collects reviews → Claude AI analyses sentiment, complaints, feature gaps, and exact customer language patterns',
-      output:  'Weekly intelligence report: top complaints, untapped features, copywriting hooks, SEO keywords extracted from real customer language',
+      output:  'Weekly intelligence report: top complaints, untapped features, copywriting hooks, SEO keywords from real customer language',
     },
 
     tech: ['Python', 'Playwright', 'BeautifulSoup', 'Claude AI', 'PostgreSQL', 'n8n', 'Excel / PDF'],
 
     roiStat:  '60 sec',
-    roiLabel: 'to analyse 4,000 reviews (vs. 3 weeks manually)',
+    roiLabel: 'to analyse 4,000 reviews vs 3 weeks manually',
     roiNote:  'One insight from one report has paid for 12 months of this service for our clients.',
+
+    trial: {
+      headline: 'Free competitor intelligence report — on us',
+      duration: 'One-time',
+      what: [
+        'Your top competitor fully analysed',
+        'Top complaints, gaps & keywords mapped',
+        'Delivered as PDF within 48 hours',
+        'No card. No contract. No catch.',
+      ],
+    },
 
     pricing: [
       {
@@ -308,7 +273,7 @@ export const SERVICES = [
           'Untapped feature gaps',
           'Exact copywriting hooks',
           'SEO keywords from real reviews',
-          'Delivered as PDF + Excel',
+          'PDF + Excel delivery',
         ],
       },
       {
@@ -319,21 +284,20 @@ export const SERVICES = [
         priceNote: 'Up to ₹6,000/month based on product count',
         features: [
           'Weekly automated review scrape',
-          'Sentiment trend tracking over time',
+          'Sentiment trend tracking',
           'New complaint & praise alerts',
           'Competitor price-drop correlation',
           'Monday morning email report',
-          'All historical data retained in DB',
+          'All historical data retained',
         ],
       },
     ],
 
     retainer: null,
-
     architecture: 'Python + Playwright (scraper) → PostgreSQL (versioned review storage) → Claude AI batch analysis → n8n weekly schedule → Excel + PDF report → email to client',
   },
 
-  // ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ──
+  // ─────────────────────────────────────────
 
   {
     id:          5,
@@ -341,10 +305,16 @@ export const SERVICES = [
     nicheId:     'ecommerce',
     icon:        'ti-eye',
     accentColor: 'cyan',
-    title:       'Price Monitoring System',
-    tagline:     'Your competitor dropped their price at 3am. This system caught it. You slept. You still won the Buy Box.',
-    shortDesc:   'Monitor 1,000 products across Amazon & Flipkart every 2 hours. Instant alerts the moment prices change.',
-    youtubeId:   'GxS7sBbRdx8',             // ← real video: youtu.be/GxS7sBbRdx8
+
+    title:     'Price Monitoring System',
+    tagline:   "You lost the Buy Box at 2:47am. You found out at 9:15am when you checked manually. By then you'd already lost ₹18,000 in sales to a competitor who undercut you by ₹10.",
+    shortDesc: 'Monitor 1,000 products across Amazon & Flipkart every 2 hours. Know the moment a competitor drops their price — before your sales drop with it.',
+    youtubeId: 'GxS7sBbRdx8',
+
+    problem: {
+      hook:   "Amazon's Buy Box algorithm updates every 15 minutes. You check competitor prices once a day. That gap is costing you money every single night.",
+      detail: "One overnight drop — ₹10 cheaper, Buy Box gone, traffic shifted — and you wake up to a terrible sales day with no idea why. You spend 30 minutes manually checking. You find it. You match it. The Buy Box comes back. But the morning is gone, and the lost sales don't come back. This system finds the drop in under 2 minutes and sends you an alert before you've had your first chai.",
+    },
 
     searchKeywords: [
       'price monitoring', 'price tracker', 'amazon price', 'flipkart price',
@@ -352,22 +322,28 @@ export const SERVICES = [
       'repricing', 'price history', 'marketplace pricing',
     ],
 
-    problem: {
-      hook:   'Every hour a competitor is cheaper than you, Amazon ranks them higher.',
-      detail: 'One unchecked overnight price drop can cost a mid-size seller ₹10,000–50,000 in lost Buy Box revenue before they wake up. Manual checking takes 30–60 minutes every morning and still misses 3am changes.',
-    },
-
     what: {
-      input:   'Amazon and Flipkart search URLs — your keywords, your categories, your competitor ASINs',
+      input:   'Amazon and Flipkart search URLs — your keywords, categories, competitor ASINs',
       process: 'Playwright scrapes 1,000 products every 2–4 hours → PostgreSQL stores price history → Python detects drops → alerts fire instantly',
-      output:  'Real-time Slack / email alert: product name, old price, new price, drop %, competitor link — in one message',
+      output:  'Real-time Slack / email alert: product name, old price, new price, drop %, competitor link — all in one message',
     },
 
     tech: ['Python', 'Playwright', 'PostgreSQL', 'rapidfuzz', 'n8n', 'FastAPI'],
 
     roiStat:  '₹10,000+',
     roiLabel: 'in Buy Box revenue protected per incident',
-    roiNote:  'One recovered Buy Box session pays for 3 months of this service. The price difference between winning and losing is often ₹10.',
+    roiNote:  'One recovered Buy Box session pays for 3 months of this service. The price difference between winning and losing is often just ₹10.',
+
+    trial: {
+      headline: 'Monitor your first 50 products — free',
+      duration: '7 days',
+      what: [
+        '50 products tracked every 4 hours',
+        'Live Slack or email price drop alerts',
+        'Full price history report at end',
+        'No card. No contract. No catch.',
+      ],
+    },
 
     pricing: [
       {
@@ -435,21 +411,22 @@ export const SERVICES = [
     nicheId:     'sales',
     icon:        'ti-send',
     accentColor: 'purple',
-    title:       'Lead Management Automation',
-    tagline:     "The system that makes your first reply faster than your competitor's first coffee.",
-    shortDesc:   'Respond to every new lead in 5 seconds. Validate, score, assign, and personalise — fully automated.',
-    youtubeId:   'kbkyW1aUen8',             // ← real video: youtu.be/kbkyW1aUen8
+
+    title:     'Lead Management Automation',
+    tagline:   "Right now, someone just submitted a form on your competitor's site. They got a reply in 4 seconds. You haven't seen your own lead yet.",
+    shortDesc: 'Respond to every new lead in 5 seconds — personalised, validated, and logged — before your competitor even opens their laptop.',
+    youtubeId: 'kbkyW1aUen8',
+
+    problem: {
+      hook:   "You're not losing clients to better products. You're losing them to faster replies.",
+      detail: "78% of buyers choose the first business to respond. Your lead sits in a Gmail tab for 2–6 hours while your team handles other things. By the time you call, they've already spoken to two competitors and half-decided. This system replies in 5 seconds — personalised, validated, and routed — every time, without anyone checking anything.",
+    },
 
     searchKeywords: [
       'lead management', 'lead automation', 'crm automation', 'form automation',
       'follow up automation', 'lead response', 'lead scoring', 'email automation',
       'sales automation', 'lead routing', 'lead nurture', 'response time',
     ],
-
-    problem: {
-      hook:   '78% of buyers choose the first business to respond.',
-      detail: 'Most small teams take 2–6 hours to follow up on a form submission. By then, the lead has talked to three competitors. This system responds in 5 seconds — before the lead even closes their browser tab.',
-    },
 
     what: {
       input:   'Any web form, Typeform, Google Form, or CSV export from your ad platform',
@@ -460,8 +437,19 @@ export const SERVICES = [
     tech: ['Python', 'n8n', 'Claude AI', 'Gmail', 'Google Sheets', 'Slack'],
 
     roiStat:  '5 sec',
-    roiLabel: 'average lead response time (vs. 2–6 hour industry average)',
-    roiNote:  'The gap between a 5-second reply and a 4-hour reply is often the difference between a closed deal and a ghosted lead.',
+    roiLabel: 'average lead response time vs 2–6 hour industry average',
+    roiNote:  'The gap between a 5-second reply and a 4-hour reply is the difference between a closed deal and a ghosted lead.',
+
+    trial: {
+      headline: 'We automate your next 50 leads — free',
+      duration: '14 days',
+      what: [
+        'Your form connected & live-tested',
+        '50 leads routed, validated & replied to',
+        'Full Slack + Google Sheets log',
+        'No card. No contract. No catch.',
+      ],
+    },
 
     pricing: [
       {
@@ -496,7 +484,7 @@ export const SERVICES = [
         popular: false,
         features: [
           'Everything in Standard',
-          'AI-personalised email copy per lead',
+          'AI-personalised email per lead',
           'Lead quality scoring & filtering',
           '14-day post-launch support',
           'Full setup & team onboarding',
@@ -528,20 +516,22 @@ export const SERVICES = [
     nicheId:     'support',
     icon:        'ti-message-chatbot',
     accentColor: 'cyan',
-    title:       'AI Customer Support Triage',
-    tagline:     'Turn 200 daily support tickets into 20 minutes of human work.',
-    shortDesc:   '60–70% of support tickets answered instantly by AI. The rest routed to your team with full context.',
-    youtubeId:   'd3penZ1sLuE',  
+
+    title:     'AI Customer Support Triage',
+    tagline:   "Your support team answered the same question for the 47th time today. The customer waited 8 hours for an answer they could have had in 8 seconds. And they're not coming back.",
+    shortDesc: '60–70% of support tickets answered instantly by AI. Your team only sees the ones that actually need a human.',
+    youtubeId: null,
+
+    problem: {
+      hook:   "Every delayed reply is a customer quietly composing a 1-star review in their head.",
+      detail: "The vast majority of every support ticket is a question your team has already answered dozens of times. The customer asking 'What's your return policy?' at 11pm doesn't want empathy — they want an answer in 10 seconds. The 8-hour wait doesn't make them feel cared for. It makes them angry enough to post about it publicly.",
+    },
+
     searchKeywords: [
       'customer support', 'support automation', 'ticket triage', 'helpdesk automation',
       'ai chatbot', 'auto reply', 'zendesk automation', 'gmail automation',
       'customer service', 'support bot', 'faq bot', 'ticket routing',
     ],
-
-    problem: {
-      hook:   '60–70% of all support tickets are the same 10 questions.',
-      detail: 'Every one answered manually — one by one — with a 12–48 hour delay that triggers refund requests, chargebacks, and 1-star reviews. Hiring more agents does not scale. This does.',
-    },
 
     what: {
       input:   'Gmail, Helpscout, or Zendesk incoming ticket',
@@ -552,8 +542,19 @@ export const SERVICES = [
     tech: ['n8n', 'Claude AI', 'Gmail / SMTP', 'Airtable', 'Slack', 'Zendesk'],
 
     roiStat:  '5–15 hrs',
-    roiLabel: 'of agent time saved per week',
+    roiLabel: 'of agent time saved every single week',
     roiNote:  'At ₹200/hr agent cost = ₹4,000–12,000 saved per month. System pays for itself within the first week.',
+
+    trial: {
+      headline: 'We triage your next 100 tickets — free',
+      duration: '7 days',
+      what: [
+        'AI trained on your top 20 query types',
+        '100 tickets auto-classified & replied to',
+        'Weekly report with resolution rate',
+        'No card. No contract. No catch.',
+      ],
+    },
 
     pricing: [
       {
@@ -561,12 +562,12 @@ export const SERVICES = [
         price:    '₹8,000',
         period:   'one-time',
         popular:  false,
-        priceNote: 'Up to ₹15,000 depending on ticket volume & existing platform',
+        priceNote: 'Up to ₹15,000 depending on ticket volume & platform',
         features: [
           'Full triage system setup',
           'Knowledge base configuration',
           'AI intent classification',
-          'Auto-reply templates (up to 20 query types)',
+          'Auto-reply templates (up to 20 types)',
           'Slack escalation routing',
           'Airtable audit log',
           '7-day post-launch support',
@@ -588,185 +589,114 @@ export const SERVICES = [
       },
     ],
 
-    retainer: null, // retainer is already in the pricing tiers above
-
+    retainer: null,
     architecture: 'Gmail / Zendesk webhook → Claude AI (classify intent) → Branch: auto-reply from KB OR Slack escalation with context → Airtable audit log → weekly summary report',
   },
 
   // ──────────────────────────────────────────────────────────
-  // TEMPLATE — Copy this to add a new service
+  // TEMPLATE — Copy this block to add a new service
   // ──────────────────────────────────────────────────────────
   // {
-  //   id:          6,                        // ← next number in sequence
-  //   slug:        'invoice-automation',     // ← lowercase-hyphenated, used in URL
-  //   nicheId:     'finance',               // ← must match a NICHES[].id above
-  //   icon:        'ti-receipt',            // ← tabler icon class (tabler.io/icons)
-  //   accentColor: 'purple',               // ← 'purple' or 'cyan'
+  //   id:          6,                         // ← next number in sequence
+  //   slug:        'invoice-automation',      // ← lowercase-hyphenated, used in URL
+  //   nicheId:     'finance',                // ← must match a NICHES[].id
+  //   icon:        'ti-receipt',             // ← tabler icon: tabler.io/icons
+  //   accentColor: 'purple',                // ← 'purple' or 'cyan'
   //   title:       'Invoice Automation',
-  //   tagline:     'One-line tagline that hooks the reader.',
+  //   tagline:     'One emotionally triggering line that hooks the reader.',
   //   shortDesc:   'Two-sentence description for the home page card.',
-  //   youtubeId:   null,                   // ← 'VIDEO_ID' or null if not yet uploaded
-  //
-  //   searchKeywords: [
-  //     'invoice', 'billing', 'payment', 'automation',
-  //   ],
-  //
+  //   youtubeId:   null,                    // ← 'VIDEO_ID' or null
   //   problem: {
-  //     hook:   'One bold sentence stating the painful problem.',
-  //     detail: 'Two-three sentences expanding the pain point.',
+  //     hook:   'Bold one-sentence problem statement.',
+  //     detail: 'Two-three sentence expansion of the pain.',
   //   },
-  //
+  //   searchKeywords: ['invoice', 'billing'],
   //   what: {
-  //     input:   'What the business provides to start the automation',
-  //     process: 'What the system does step by step',
-  //     output:  'What the business receives as the end result',
+  //     input:   'What the business provides',
+  //     process: 'What the system does',
+  //     output:  'What the business receives',
   //   },
-  //
-  //   tech: ['Python', 'n8n', 'Gmail'],   // ← array of tool/tech names
-  //
-  //   roiStat:  '10 hrs',
-  //   roiLabel: 'saved per week',
-  //   roiNote:  'One sentence proof statement.',
-  //
-  //   pricing: [
-  //     {
-  //       name:     'Basic',
-  //       price:    '₹999',
-  //       period:   'one-time',    // 'one-time' | '/month' | '/product'
-  //       popular:  false,
-  //       priceNote: '',          // optional range note
-  //       features: ['Feature one', 'Feature two'],
-  //     },
-  //   ],
-  //
-  //   retainer: null,             // or { price, period, priceNote?, features[] }
+  //   tech: ['Python', 'n8n'],
+  //   roiStat:  '10 hrs', roiLabel: 'saved per week', roiNote: 'Proof statement.',
+  //   trial: {
+  //     headline: 'Try [specific thing] — free',
+  //     duration: '7 days',
+  //     what: [
+  //       'Specific deliverable 1',
+  //       'Specific deliverable 2',
+  //       'Specific deliverable 3',
+  //       'No card. No contract. No catch.',
+  //     ],
+  //   },
+  //   pricing: [{ name, price, period, popular, features[], priceNote? }],
+  //   retainer: null,
   //   architecture: 'Tool A → Tool B → Tool C',
   // },
 ]
 
 // ============================================================
-// 4. SEARCH — Service search utility functions
-// ============================================================
-//
-// SEARCH FLOW (how it works in the UI):
-//
-//   1. User types in the search bar on the Services page
-//   2. searchServices(query) filters SERVICES in real time
-//   3. Results update as user types (no submit needed)
-//   4. IF results found  → show matching service cards
-//   5. IF no results     → show "Not found" state with:
-//        • Message: "We don't offer this yet"
-//        • Button:  "Request this service →"
-//        • Link to: /get-started?service=ENCODED_QUERY
-//   6. On Contact.jsx, useSearchParams() reads ?service=
-//      and pre-fills the "Describe your challenge" textarea
-//      so the user's search query carries over naturally.
-//
-// This redirect logic lives in Services.jsx and Contact.jsx.
-// This file only exports the search/filter functions.
+// 4. SEARCH UTILITY FUNCTIONS
 // ============================================================
 
-/**
- * Search services by free-text query.
- * Matches against title, description, keywords, niche label, and tech stack.
- * Multi-word queries use AND logic (all words must match somewhere).
- *
- * @param {string} query - User's search input
- * @returns {Array} - Filtered SERVICES array (empty array if no match)
- *
- * Usage in Services.jsx:
- *   const results = searchServices(query)
- *   if (results.length === 0) → show no-results UI with redirect
- */
 export function searchServices(query = '') {
   const q = query.toLowerCase().trim()
   if (!q) return SERVICES
-
   const words = q.split(/\s+/).filter(Boolean)
-
   return SERVICES.filter(service => {
     const niche = NICHES.find(n => n.id === service.nicheId)
-
     const haystack = [
-      service.title,
-      service.shortDesc,
-      service.tagline,
-      service.problem?.hook  ?? '',
-      service.problem?.detail ?? '',
-      niche?.label           ?? '',
-      niche?.description     ?? '',
+      service.title, service.shortDesc, service.tagline,
+      service.problem?.hook ?? '', service.problem?.detail ?? '',
+      niche?.label ?? '', niche?.description ?? '',
       ...(service.searchKeywords ?? []),
-      ...(service.tech            ?? []),
-      ...(niche?.searchTerms      ?? []),
+      ...(service.tech ?? []),
+      ...(niche?.searchTerms ?? []),
     ].join(' ').toLowerCase()
-
-    // AND logic: every typed word must appear somewhere in the text
     return words.every(word => haystack.includes(word))
   })
 }
 
-/**
- * Get all services belonging to a specific niche.
- * Used by the Services page to render grouped sections.
- *
- * @param {string} nicheId - e.g. 'ecommerce', 'sales', 'support'
- * @returns {Array} - Services for that niche
- */
 export function getServicesByNiche(nicheId) {
   return SERVICES.filter(s => s.nicheId === nicheId)
 }
 
-/**
- * Get a single service by its URL slug.
- * Used for deep-linking to a specific service section.
- *
- * @param {string} slug - e.g. 'price-monitoring'
- * @returns {Object|undefined}
- */
 export function getServiceBySlug(slug) {
   return SERVICES.find(s => s.slug === slug)
 }
 
-/**
- * Build the "no results" redirect URL for the Contact page.
- * Call this when searchServices() returns an empty array.
- *
- * @param {string} query - The user's search query
- * @returns {string} - URL string like /get-started?service=price+monitoring
- */
 export function buildContactRedirectUrl(query) {
   return `/get-started?service=${encodeURIComponent(query.trim())}`
 }
 
 // ============================================================
-// 5. STATS — Hero stats bar on the Home page
-// Update as you complete more projects.
+// 5. STATS
 // ============================================================
-
 export const STATS = [
-  { value: '20+',   label: 'Hours saved per client / month' },
-  { value: '5',     label: 'Flagship automations available'  },
-  { value: '5 sec', label: 'Fastest lead response time built' },
+  { value: '20+',   label: 'Hours saved per client / month'       },
+  { value: '5',     label: 'Flagship automations available'        },
+  { value: '5 sec', label: 'Fastest lead response time built'      },
   { value: '₹1',    label: 'Cost per AI-generated product listing' },
 ]
 
 // ============================================================
-// 6. FAQ — Accordion on the Home page
-// Add/remove objects to add/remove FAQ items.
+// 6. FAQ
 // ============================================================
-
 export const FAQ = [
   {
     q: 'Do I need any coding knowledge to use these automations?',
     a: 'Zero. We build, test, and hand over the complete system. You use it like any other tool — no code, no complexity on your end.',
   },
   {
+    q: 'What exactly do I get in the free trial?',
+    a: "Each service has a specific free trial — 50 leads automated, 50 products monitored for 7 days, 25 AI-generated listings, 100 tickets triaged, or a free competitor intelligence report. You get the full working system, real output on your real data, with no payment and no commitment required.",
+  },
+  {
     q: 'What happens if the automation breaks after I pay?',
-    a: 'Every project includes a support period (7–14 days depending on the package). If anything breaks during that window, we fix it at no cost. Premium packages include 14-day support. Monthly retainer clients get ongoing priority support indefinitely.',
+    a: 'Every project includes a support period (7–14 days depending on the package). If anything breaks during that window, we fix it at no cost. Monthly retainer clients get ongoing priority support indefinitely.',
   },
   {
     q: 'Is my business data safe?',
-    a: "Yes. Your data is processed only by enterprise-grade tools in the stack (Google, n8n, Airtable, Anthropic). We do not store your customer data on our own servers. Every automation runs inside your own accounts which you fully own and control.",
+    a: "Yes. Your data is processed only by enterprise-grade tools in the stack (Google, n8n, Airtable, Anthropic). We do not store your customer data on our own servers. Every automation runs inside your own accounts — you fully own and control everything.",
   },
   {
     q: 'Do you accept UPI or other Indian payment methods?',
@@ -774,26 +704,21 @@ export const FAQ = [
   },
   {
     q: 'How long does it take to build and deliver?',
-    a: "Basic and Standard packages are typically delivered within 2–4 business days. Premium and custom builds take 5–10 business days. We'll give you a firm timeline on the free consultation call before you pay anything.",
+    a: "Basic and Standard packages are delivered within 2–4 business days. Premium and custom builds take 5–10 business days. We give you a firm timeline on the free consultation call before you pay anything.",
   },
   {
     q: 'Can I request an automation that is not listed here?',
-    a: "Absolutely. The five services above are the most requested ones, but we build custom Python & AI workflows for any repetitive business process. Use the search bar to describe your need — if it's not listed, you can request it directly from there.",
-  },
-  {
-    q: 'Do you work with businesses outside India?',
-    a: 'We primarily serve Indian small businesses right now, but we work with international clients for the right projects. Pricing for international clients is quoted in USD.',
+    a: "Absolutely. Use the search bar on the Services page to describe what you need — if we don't offer it yet, you'll see a direct option to request it. We build custom Python & AI workflows for any repetitive business process.",
   },
   {
     q: 'What is a monthly retainer and do I need one?',
-    a: "A retainer means we actively manage and maintain your automation every month — updating it as your business changes, adding new team members, generating performance reports, and fixing issues immediately. It's optional but recommended for systems that touch revenue (like price monitoring or lead routing).",
+    a: "A retainer means we actively manage and maintain your automation every month — updating it as your business changes, training it on new data, generating performance reports, and fixing issues immediately. It's optional but recommended for systems that directly touch revenue.",
   },
 ]
 
 // ============================================================
-// 7. HOW IT WORKS — 3-step process section on Home page
+// 7. HOW IT WORKS
 // ============================================================
-
 export const HOW_IT_WORKS = [
   {
     step:  '01',
@@ -813,10 +738,8 @@ export const HOW_IT_WORKS = [
 ]
 
 // ============================================================
-// 8. TARGET CLIENTS — "Who it's for" pills on Home page
-// Add/remove strings to add/remove client type pills.
+// 8. TARGET CLIENTS
 // ============================================================
-
 export const TARGET_CLIENTS = [
   'Amazon & Flipkart sellers',
   'Shopify & D2C stores',
