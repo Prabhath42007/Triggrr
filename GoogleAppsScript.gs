@@ -59,7 +59,7 @@
 const CONFIG = {
   // Email address that receives a notification for every submission.
   // Tip: use a filter in Gmail to auto-label these "triggrr-leads".
-  NOTIFY_EMAIL: 'triggrr.tech@gmail.com',
+  NOTIFY_EMAIL: 'prabhath42007@gmail.com',
 
   // Name of the sheet tab where submissions are saved.
   // Created automatically if it doesn't exist.
