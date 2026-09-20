@@ -494,30 +494,6 @@ export default function Contact() {
                     </select>
                   </Field>
 
-                  {/* Budget */}
-                  <Field id="f-budget" label="Monthly budget" required error={errors.budget}>
-                    <select
-                      {...inp('budget')}
-                      className="form-select"
-                      style={errors.budget ? ERR_STYLE : {}}
-                    >
-                      <option value="">Select budget range</option>
-                      {BUDGETS.map(opt => (
-                        <option key={opt} value={opt}>{opt}</option>
-                      ))}
-                    </select>
-                  </Field>
-
-                  {/* Timeline */}
-                  <Field id="f-timeline" label="Preferred timeline" optional>
-                    <select {...inp('timeline')} className="form-select">
-                      <option value="">When do you need this?</option>
-                      {TIMELINES.map(opt => (
-                        <option key={opt} value={opt}>{opt}</option>
-                      ))}
-                    </select>
-                  </Field>
-
                   {/* Challenge — full width */}
                   <Field
                     id="f-challenge"
