@@ -119,7 +119,7 @@ function doPost(e) {
     }
 
     // 3. Basic required-field validation
-    const required = ['name', 'email', 'business', 'industry', 'service', 'budget', 'challenge'];
+    const required = ['name', 'email', 'business', 'industry', 'service', 'challenge'];
     for (const field of required) {
       if (!data[field] || !String(data[field]).trim()) {
         return jsonResponse({ success: false, message: `Missing required field: ${field}` });
