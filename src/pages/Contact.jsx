@@ -1,27 +1,3 @@
-/**
- * Contact.jsx — Client intake form ("Get Started" page).
- *
- * ── FEATURES ─────────────────────────────────────────────────
- *  • Pre-fill  — reads ?service= from URL (Services no-results redirect)
- *  • Validation — per-field, clears on change, blocks submit until valid
- *  • Honeypot  — invisible field; bots fill it → fake success, no submit
- *  • reCAPTCHA v3 — loaded dynamically; gracefully skipped if key not set
- *  • Submission — POST to Google Apps Script (no-cors) → Google Sheets
- *  • States    — idle → loading → success (replaces form) or error (inline)
- *
- * ── SETUP REQUIRED ───────────────────────────────────────────
- *  1. Deploy GoogleAppsScript.gs as a Web App (see SITE_REFERENCE.txt §9)
- *  2. Set VITE_SCRIPT_URL in your .env file
- *  3. Set VITE_RECAPTCHA_KEY (optional but recommended)
- *
- * ── ADDING / REMOVING FORM FIELDS ────────────────────────────
- *  • Dropdown options: edit the constant arrays near the top of this file
- *  • New text field: add to INITIAL_FORM + add a <Field> in the JSX
- *  • Remove a field: delete from INITIAL_FORM + remove from JSX + validate()
- *  • After any change, update GoogleAppsScript.gs column headers to match
- * ─────────────────────────────────────────────────────────────
- */
-
 import { useState, useEffect }    from 'react'
 import { Link, useSearchParams }  from 'react-router-dom'
 import { SERVICES, SITE }         from '@/data/services'
@@ -48,21 +24,6 @@ const SERVICE_OPTIONS = [
   'Custom automation (describe below)',
 ]
 
-const BUDGETS = [
-  'Under ₹5,000',
-  '₹5,000 – ₹15,000',
-  '₹15,000 – ₹30,000',
-  '₹30,000 – ₹60,000',
-  '₹60,000+',
-  "Let's discuss",
-]
-
-const TIMELINES = [
-  'As soon as possible',
-  'Within 2 weeks',
-  'Within a month',
-  'Flexible',
-]
 
 const SOURCES = [
   'Google Search',
@@ -82,8 +43,6 @@ const INITIAL_FORM = {
   business:  '',
   industry:  '',
   service:   '',
-  budget:    '',
-  timeline:  '',
   challenge: '',
   source:    '',
 }
@@ -103,8 +62,6 @@ function validate(f) {
     e.industry = 'Please select your business type'
   if (!f.service)
     e.service = 'Please select a service'
-  if (!f.budget)
-    e.budget = 'Please select a budget range'
   if (!f.challenge.trim())
     e.challenge = 'Please describe your challenge'
   else if (f.challenge.trim().length < 20)
